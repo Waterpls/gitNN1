@@ -20,43 +20,35 @@ class Network(object) :
 	for x, y in zip(sizes[:-1], sizes[1:])]
 */
 class Network {
+	
+public:
 	int num_lay; //number of layers
 	mat biases; // matrix of biases
 	mat weights; // matrix of weights
-public:
-	Network(int *, int );
+	Network(rowvec, int );
 };
 
-Network::Network (int *p, int lenght){
-	int max;
-	rowvec temp;
-
-	temp.fill(-2.0);
-	for (int i = 0; i < lenght; i++) { temp(i) = *(p + i); };
-	max = temp.max;
-	
+Network::Network (rowvec temp, int lenght){
+	int max_val;
+	max_val = (int) max(temp);
 	num_lay = lenght;
-	biases.set_size(max, num_lay); // set size of matrix of biases
+	biases.set_size(max_val, num_lay); // set size of matrix of biases
 	weights.copy_size(biases); // same size as matrix of biases
-	biases.fill(-2.0);
-	weights.fill(-2.0);
 	
 	default_random_engine generator;
 	normal_distribution<double> d(0.0, 1.0);
-	int i,j;
-	i = j = 0;
-	for (; i < lenght; i++)
-		for (; j < temp(i); j++) {
-			biases(i, j) = d(generator);
-			weights(i, j) = d(generator);
-		};
+	biases.imbue([&]() { return d(generator); });
+	weights.imbue([&]() { return d(generator); });
 };
 
 
 int main()
 {
-	int prmt[3]{ 3 5 4 };
-	Network net1(prmt, 3);
+	rowvec sizes;
+	sizes << 3 << 5 << 4 << endr;
+	Network net1(sizes, 3);
+	for (int i = 0; i < 3; i++)
+		cout << net1.biases(i, 1) << '\n';
 	return 0;
 }
 
