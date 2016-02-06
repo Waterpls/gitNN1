@@ -9,46 +9,39 @@
 using namespace std;
 using namespace arma;
 
-/*
-class Network(object) :
-
-	def __init__(self, sizes) :
-	self.num_layers = len(sizes)
-	self.sizes = sizes
-	self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
-	self.weights = [np.random.randn(y, x)
-	for x, y in zip(sizes[:-1], sizes[1:])]
-*/
 class Network {
 	
 public:
-	int num_lay; //number of layers
-	mat biases; // matrix of biases
-	mat weights; // matrix of weights
+	int num_col; //number of layers
+	int num_row; //number of colums
+	vector<mat> weights;
+	vector<mat> biases;
+	
 	Network(rowvec, int );
 };
 
 Network::Network (rowvec temp, int lenght){
-	int max_val;
-	max_val = (int) max(temp);
-	num_lay = lenght;
-	biases.set_size(max_val, num_lay); // set size of matrix of biases
-	weights.copy_size(biases); // same size as matrix of biases
-	
 	default_random_engine generator;
 	normal_distribution<double> d(0.0, 1.0);
-	biases.imbue([&]() { return d(generator); });
-	weights.imbue([&]() { return d(generator); });
+	
+	num_row = (int) max(temp);
+	num_col = lenght;
+	mat temp_mat;
+	temp_mat.set_size(num_row, num_col);
+	vector<mat> biases(num_row*num_col);
+	vector<mat> weights(num_row*num_col);
+	temp_mat.imbue([&]() { return d(generator); });
+	for (int i = 0; i < biases.size(); i++) {
+		biases[i] = temp_mat;
+		weights[i] = temp_mat;
+	}
 };
-
 
 int main()
 {
 	rowvec sizes;
 	sizes << 3 << 5 << 4 << endr;
 	Network net1(sizes, 3);
-	for (int i = 0; i < 3; i++)
-		cout << net1.biases(i, 1) << '\n';
 	return 0;
 }
 
