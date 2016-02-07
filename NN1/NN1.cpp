@@ -5,19 +5,38 @@
 #include <armadillo>
 #include <array>
 #include <random>
+#include <cmath>
 
 using namespace std;
 using namespace arma;
 
+/*    def feedforward(self, a):
+        """Return the output of the network if "a" is input."""
+        for b, w in zip(self.biases, self.weights):
+            a = sigmoid(np.dot(w, a)+b)
+        return a */
+
 class Network {
-	
 public:
 	int num_col; //number of layers
 	int num_row; //number of colums
 	vector<mat> weights;
 	vector<mat> biases;
 	
+	mat feedforward(mat);
 	Network(rowvec, int );
+};
+
+mat Network::feedforward(mat a)
+{
+	for (int i = 0; i < num_row; i++)
+	{
+		vec temp;
+		//need rework of biases back to mat class instead of vector<mat>
+		temp = sigmoid(dot(weights[i].col(i), a) + biases[i].col(i)(1));
+		//a.col(i) = sigmoid( weights  );
+	};
+	return a;
 };
 
 Network::Network (rowvec temp, int lenght){
@@ -37,11 +56,24 @@ Network::Network (rowvec temp, int lenght){
 	}
 };
 
+rowvec sigmoid(rowvec z) {
+	for (int i = 0; i < (int) z.size(); i++)
+		z[i] = (1/(1+ pow(2.718281828, -z[i])));
+	return z;
+};
+vec sigmoid(vec z) {
+	for (int i = 0; i < (int) z.size(); i++)
+		z[i] = (1 / (1 + pow(2.718281828, -z[i])));
+	return z;
+};
+double sigmoid(double z) {return z = (1 / (1 + pow(2.718281828, -z)));};
+
 int main()
 {
 	rowvec sizes;
 	sizes << 3 << 5 << 4 << endr;
 	Network net1(sizes, 3);
+	system("pause");
 	return 0;
 }
 
