@@ -10,6 +10,18 @@
 using namespace std;
 using namespace arma;
 
+rowvec sigmoid(rowvec z) {
+	for (int i = 0; i < (int)z.size(); i++)
+		z[i] = (1 / (1 + pow(2.718281828, -z[i])));
+	return z;
+};
+vec sigmoid(vec z) {
+	for (int i = 0; i < (int)z.size(); i++)
+		z[i] = (1 / (1 + pow(2.718281828, -z[i])));
+	return z;
+};
+double sigmoid(double z) { return z = (1 / (1 + pow(2.718281828, -z))); };
+
 /*    def feedforward(self, a):
         """Return the output of the network if "a" is input."""
         for b, w in zip(self.biases, self.weights):
@@ -21,7 +33,7 @@ public:
 	int num_col; //number of layers
 	int num_row; //number of colums
 	vector<mat> weights;
-	vector<mat> biases;
+	mat biases;
 	
 	mat feedforward(mat);
 	Network(rowvec, int );
@@ -33,8 +45,7 @@ mat Network::feedforward(mat a)
 	{
 		vec temp;
 		//need rework of biases back to mat class instead of vector<mat>
-		temp = sigmoid(dot(weights[i].col(i), a) + biases[i].col(i)(1));
-		//a.col(i) = sigmoid( weights  );
+		temp = sigmoid(dot((weights[i].col(i)), a.col(i)) + biases[i]);
 	};
 	return a;
 };
@@ -47,26 +58,15 @@ Network::Network (rowvec temp, int lenght){
 	num_col = lenght;
 	mat temp_mat;
 	temp_mat.set_size(num_row, num_col);
-	vector<mat> biases(num_row*num_col);
+	mat biases(num_row,num_col);
 	vector<mat> weights(num_row*num_col);
 	temp_mat.imbue([&]() { return d(generator); });
-	for (int i = 0; i < biases.size(); i++) {
-		biases[i] = temp_mat;
+	biases = temp_mat;
+	for (int i = 0; i < (int) weights.size(); i++)
 		weights[i] = temp_mat;
-	}
 };
 
-rowvec sigmoid(rowvec z) {
-	for (int i = 0; i < (int) z.size(); i++)
-		z[i] = (1/(1+ pow(2.718281828, -z[i])));
-	return z;
-};
-vec sigmoid(vec z) {
-	for (int i = 0; i < (int) z.size(); i++)
-		z[i] = (1 / (1 + pow(2.718281828, -z[i])));
-	return z;
-};
-double sigmoid(double z) {return z = (1 / (1 + pow(2.718281828, -z)));};
+
 
 int main()
 {
