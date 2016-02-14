@@ -22,11 +22,6 @@ vec sigmoid(vec z) {
 };
 double sigmoid(double z) { return z = (1 / (1 + pow(2.718281828, -z))); };
 
-/*    def feedforward(self, a):
-        """Return the output of the network if "a" is input."""
-        for b, w in zip(self.biases, self.weights):
-            a = sigmoid(np.dot(w, a)+b)
-        return a */
 
 class Network {
 public:
@@ -35,20 +30,45 @@ public:
 	vector<mat> weights;
 	mat biases;
 	
-	mat feedforward(mat);
+	vec feedforward(vec);
+	int SGD(vector<vec> training_data, int epochs, int batch_size, double eta, bool test_data=false);
 	Network(rowvec, int );
 };
 
-mat Network::feedforward(mat a)
+int Network::SGD(vector<vec> training_data, int epochs, int batch_size, double eta, bool test_data)
 {
-	for (int i = 0; i < num_row; i++)
-	{
-		vec temp;
-		//need rework of biases back to mat class instead of vector<mat>
-		temp = sigmoid(dot((weights[i].col(i)), a.col(i)) + biases[i]);
+	return 0;
+}
+
+vec Network::feedforward(vec a)
+{
+	vec temp;
+	for (int j = 0; j < num_col; j++) { //feedforward for network
+		for (int i = 0; i < num_row; i++) // feedforward for column
+			temp[i] = sigmoid(dot((weights[i+j*num_row].col(j)), a) + biases[i]);
+		a = temp;
 	};
-	return a;
+		return a;
 };
+
+/* def SGD(self, training_data, epochs, mini_batch_size, eta,
+            test_data=None):
+        if test_data: n_test = len(test_data)
+        n = len(training_data)
+        for j in xrange(epochs):
+            random.shuffle(training_data)
+            mini_batches = [
+                training_data[k:k+mini_batch_size]
+                for k in xrange(0, n, mini_batch_size)]
+            for mini_batch in mini_batches:
+                self.update_mini_batch(mini_batch, eta)
+            if test_data:
+                print "Epoch {0}: {1} / {2}".format(
+                    j, self.evaluate(test_data), n_test)
+            else:
+                print "Epoch {0} complete".format(j)*/
+
+
 
 Network::Network (rowvec temp, int lenght){
 	default_random_engine generator;
@@ -65,7 +85,6 @@ Network::Network (rowvec temp, int lenght){
 	for (int i = 0; i < (int) weights.size(); i++)
 		weights[i] = temp_mat;
 };
-
 
 
 int main()
