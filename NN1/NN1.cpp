@@ -6,7 +6,7 @@
 #include <array>
 #include <random>
 #include <cmath>
-
+// some comment
 using namespace std;
 using namespace arma;
 
